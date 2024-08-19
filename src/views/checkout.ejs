@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .checkout-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .checkout-form {
+            margin-bottom: 20px;
+        }
+        .btn-checkout {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .btn-checkout:hover {
+            opacity: 0.8;
+        }
+        .readonly {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <%- include('layouts/partials/header', { user: user }) %>
+    <div class="checkout-container">
+        <h1 class="text-center">Thanh Toán</h1>
+        <% if (cart && cart.items && cart.items.length > 0) { %>
+            <form action="/orders/checkout" method="POST" class="checkout-form">
+                <h3>Thông Tin Đơn Hàng</h3>
+                <div class="form-group">
+                    <label for="fullName">Họ và Tên</label>
+                    <input type="text" id="fullName" name="fullName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="street">Địa Chỉ</label>
+                    <input type="text" id="street" name="street" class="form-control" placeholder="Số nhà, đường..." required>
+                </div>
+                <div class="form-group">
+                    <label for="city">Thành Phố</label>
+                    <input type="text" id="city" name="city" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">Tỉnh/Thành Phố</label>
+                    <input type="text" id="state" name="state" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="country">Quốc Gia</label>
+                    <input type="text" id="country" name="country" class="form-control readonly" value="Việt Nam" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Số Điện Thoại</label>
+                    <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Phương Thức Thanh Toán</label>
+                    <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+                        <option value="cash_on_delivery">Thanh Toán Khi Nhận Hàng</option>
+                        <option value="bank">Chuyển Khoản Ngân Hàng</option>
+                        <option value="momo">Thanh Toán Momo</option>
+                    </select>
+                </div>
+                <h3>Danh Sách Sản Phẩm</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Giá</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let totalAmount = 0; %>
+                        <% cart.items.forEach(item => { %>
+                            <tr>
+                                <td><img src="<%= item.product.thumbnail %>" alt="<%= item.product.name %>" style="width: 100px; height: auto;"></td>
+                                <td><%= item.product.name %></td>
+                                <td><%= item.product.price %></td>
+                                <td><%= item.quantity %></td>
+                                <td><%= (item.product.price * item.quantity).toFixed(2) %></td>
+                            </tr>
+                            <% totalAmount += item.product.price * item.quantity; %>
+                        <% }); %>
+                    </tbody>
+                </table>
+                <h3>Tổng cộng: <%= totalAmount.toFixed(2) %> VNĐ</h3>
+                <button type="submit" class="btn btn-checkout">Xác Nhận Thanh Toán</button>
+            </form>
+        <% } else { %>
+            <p class="text-center">Giỏ hàng của bạn hiện tại không có sản phẩm nào.</p>
+        <% } %>
+    </div>
+    <%- include('layouts/partials/footer') %>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

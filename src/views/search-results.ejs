@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả tìm kiếm</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('layouts/partials/header', { user: user }) %>
+
+    <div class="container mt-5">
+        <h2>Kết quả tìm kiếm cho "<%= query %>"</h2>
+    
+        <% if (products.length > 0) { %>
+            <div class="row">
+                <% products.forEach(product => { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="<%= product.thumbnail %>" class="card-img-top" alt="<%= product.name %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= product.name %></h5>
+                                <p class="card-text">Giá: <%= product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %></p>
+                                <a href="/product/<%= product._id %>" class="btn btn-primary">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>Không tìm thấy sản phẩm nào.</p>
+        <% } %>
+    </div>
+    
+
+    <%- include('layouts/partials/footer') %>
+</body>
+</html>

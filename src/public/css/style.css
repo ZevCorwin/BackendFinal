@@ -1,0 +1,19 @@
+/* public/styles.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    flex: 1;
+}
+
+footer {
+    background: #faf8f8;
+    padding: 20px;
+    text-align: center;
+    margin-top: auto;
+    /* Đảm bảo footer không bị di chuyển quá thấp nếu nội dung không đủ lớn */
+}

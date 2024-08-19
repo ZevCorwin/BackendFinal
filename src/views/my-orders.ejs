@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn Hàng Của Tôi</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <%- include('layouts/partials/header', { user: user }) %>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Đơn Hàng Của Tôi</h2>
+
+        <% if (orders.length > 0) { %>
+            <div class="row">
+                <% orders.forEach(order => { %>
+                    <div class="col-md-12 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h4 class="card-title">Đơn hàng <%= order._id %></h4>
+                                <p class="card-text">Ngày đặt: <%= order.orderDate.toLocaleString() %></p>
+                                <p class="card-text">Tổng tiền: <strong><%= order.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %></strong></p>
+                                <p class="card-text">Trạng thái: <span class="badge badge-primary"><%= order.status %></span></p>
+                            </div>
+                            <div class="card-body">
+                                <h5>Sản phẩm:</h5>
+                                <div class="row">
+                                    <% order.products.forEach(item => { %>
+                                        <div class="col-md-4">
+                                            <div class="card mb-3">
+                                                <img src="<%= item.product.thumbnail %>" class="card-img-top img-fluid" alt="<%= item.product.name %>">
+                                                <div class="card-body">
+                                                    <h6 class="card-title"><%= item.product.name %></h6>
+                                                    <p class="card-text">Số lượng: <%= item.quantity %></p>
+                                                    <p class="card-text">Giá: <%= item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="alert alert-info text-center">
+                <p>Bạn chưa có đơn hàng nào.</p>
+            </div>
+        <% } %>
+    </div>
+
+    <%- include('layouts/partials/footer') %>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

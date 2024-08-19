@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .cart-table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .cart-table th, .cart-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .btn-remove {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .btn-remove:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <%- include('layouts/partials/header', { user: user }) %>
+    <div class="cart-container">
+        <h1 class="my-4 text-center">Giỏ Hàng</h1>
+        <% if (cart && cart.items && cart.items.length > 0) { %>
+            <table class="table cart-table">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên Sản Phẩm</th>
+                        <th>Giá</th>
+                        <th>Số Lượng</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% cart.items.forEach(item => { %>
+                        <tr>
+                            <td><img src="<%= item.product.thumbnail %>" alt="<%= item.product.name %>" style="width: 100px; height: auto;"></td>
+                            <td><%= item.product.name %></td>
+                            <td><%= item.product.price %></td>
+                            <td>
+                                <!-- Thay đổi số lượng -->
+                                <form action="/cart/update/<%= item.product._id %>" method="POST" class="d-inline">
+                                    <input type="number" name="quantity" value="<%= item.quantity %>" min="1" style="width: 60px;">
+                                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                </form>
+                            </td>
+                            <td>
+                                <!-- Xóa sản phẩm khỏi giỏ hàng -->
+                                <form action="/cart/remove/<%= item.product._id %>" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-remove">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <a href="/orders/checkout" class="btn btn-primary">Thanh Toán</a>
+            </div>
+        <% } else { %>
+            <p class="text-center">Giỏ hàng của bạn hiện tại không có sản phẩm nào.</p>
+        <% } %>
+    </div>
+    <%- include('layouts/partials/footer') %>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

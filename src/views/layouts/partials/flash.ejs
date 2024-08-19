@@ -1,0 +1,11 @@
+<!-- src/views/layouts/partials/flash.ejs -->
+<% if (success_msg) { %>
+    <div class="alert alert-success" role="alert" id="flash-message">
+        <%= success_msg %>
+    </div>
+<% } %>
+<% if (error_msg) { %>
+    <div class="alert alert-danger" role="alert" id="flash-message">
+        <%= error_msg %>
+    </div>
+<% } %>

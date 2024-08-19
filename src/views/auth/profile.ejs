@@ -1,0 +1,36 @@
+<%- include('../layouts/mainLayout', { title: 'Hồ Sơ Cá Nhân', body: `
+    <div class="container mt-5">
+        <h2 class="mb-4">Hồ Sơ Cá Nhân</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form action="/auth/profile" method="POST">
+                    <div class="form-group">
+                        <label for="username">Tên đăng nhập:</label>
+                        <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">Tên:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user.firstName %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Họ:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user.lastName %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Số điện thoại:</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfBirth">Ngày sinh:</label>
+                        <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" value="<%= user.dateOfBirth ? user.dateOfBirth.toISOString().split('T')[0] : '' %>">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Cập Nhật</button>
+                </form>
+            </div>
+        </div>
+    </div>
+`) %>

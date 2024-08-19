@@ -1,0 +1,56 @@
+/* src/styles/admin.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+#sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.nav-link {
+    margin-top: 10px;
+}
+
+.nav-link.active {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+main {
+    margin-left: 250px; /* Adjust this based on sidebar width */
+    padding: 20px;
+}
+
+/* Thêm CSS cho các thông báo */
+.alert {
+    margin-top: 20px;
+}
+
+/* Tinh chỉnh các nút */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+/* Cải thiện bố cục bảng */
+.table th, .table td {
+    text-align: center;
+}
+
+.table .btn {
+    margin: 0 5px;
+}

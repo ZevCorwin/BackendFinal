@@ -1,0 +1,79 @@
+<!-- src/views/product-detail.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title><%= product.name %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .product-img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+        }
+        .product-info {
+            margin-top: 20px;
+        }
+        .product-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .product-description, .product-price {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+        .btn-add-to-cart, .btn-buy-now {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        .btn-add-to-cart {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .btn-buy-now {
+            background-color: #28a745;
+            color: #fff;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <%- include('layouts/partials/header', { user: user }) %>
+    <%- include('layouts/partials/flash') %>
+
+    <div class="product-detail-container">
+        <h1 class="product-title"><%= product.name %></h1>
+        <img src="/<%= product.thumbnail %>" alt="<%= product.name %>" class="product-img">
+        <div class="product-info">
+            <p class="product-description"><%= product.description %></p>
+            <p class="product-price">Price: <%= product.price %></p>
+            <form action="/cart/add" method="POST" class="d-inline">
+                <input type="hidden" name="productId" value="<%= product._id %>">
+                <button type="submit" class="btn btn-icon btn-icon-add-to-cart"><i class="fas fa-cart-plus"></i></button>
+            </form>          
+            <a href="/checkout" class="btn btn-buy-now">Buy Now</a>
+        </div>
+    </div>
+
+    <%- include('layouts/partials/footer') %>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#flash-message').fadeOut('slow');
+            }, 3000); // 3 giây sau khi hiển thị sẽ ẩn thông báo
+        });
+    </script>
+</body>
+</html>

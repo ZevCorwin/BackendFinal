@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Người dùng</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <h4 class="text-center mt-3">Admin Dashboard</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/admin/dashboard">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/products">
+                                Quản lý Sản phẩm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/categories">
+                                Quản lý Danh mục
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/orders">
+                                Quản lý Đơn hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">
+                                Quản lý Người dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/logout">
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+                <div class="container mt-4">
+                    <h2>Danh sách Người dùng</h2>
+
+                    <!-- Thông báo -->
+                    <% if (success_msg) { %>
+                        <div class="alert alert-success">
+                            <%= success_msg %>
+                        </div>
+                    <% } %>
+                    <% if (error_msg) { %>
+                        <div class="alert alert-danger">
+                            <%= error_msg %>
+                        </div>
+                    <% } %>
+
+                    <!-- Form thêm tài khoản -->
+                    <div class="mb-4">
+                        <h3>Thêm Tài Khoản Mới</h3>
+                        <form action="/admin/users/add" method="POST">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" name="username" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" name="password" value="dangdeptrai" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstName">First Name:</label>
+                                <input type="text" id="firstName" name="firstName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name:</label>
+                                <input type="text" id="lastName" name="lastName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number:</label>
+                                <input type="number" id="phoneNumber" name="phoneNumber" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth:</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Thêm Tài Khoản</button>
+                        </form>
+                    </div>
+
+                    <!-- Danh sách người dùng -->
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Vai trò</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach(user => { %>
+                                <tr>
+                                    <td><%= user._id %></td>
+                                    <td><%= user.username %></td>
+                                    <td><%= user.email %></td>
+                                    <td><%= user.firstName %></td>
+                                    <td><%= user.lastName %></td>
+                                    <td><%= user.role %></td>
+                                    <td>
+                                        <!-- Nút cấp quyền admin -->
+                                        <form action="/admin/users/set-admin/<%= user._id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn <%= user.role === 'admin' ? 'btn-danger' : 'btn-success' %>">
+                                                <%= user.role === 'admin' ? 'Remove Admin' : 'Set Admin' %>
+                                            </button>
+                                        </form>
+
+                                        <!-- Nút khóa tài khoản -->
+                                        <form action="/admin/users/toggle-lock/<%= user._id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn <%= user.isLocked ? 'btn-danger' : 'btn-warning' %>">
+                                                <%= user.isLocked ? 'Unlock Account' : 'Lock Account' %>
+                                            </button>
+                                        </form>
+
+                                        <!-- Nút reset mật khẩu -->
+                                        <form action="/admin/users/reset-password/<%= user._id %>" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-warning">Reset Password</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

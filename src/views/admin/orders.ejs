@@ -1,0 +1,108 @@
+<!-- admin/orders.ejs -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Đơn hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <h4 class="text-center mt-3">Admin Dashboard</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/products">Quản lý Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/categories">Quản lý Danh mục</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/orders">Quản lý Đơn hàng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">Quản lý Người dùng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/logout">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="container mt-4">
+                    <h2>Danh sách Đơn hàng</h2>
+
+                    <!-- Search and filter form -->
+                    <form method="GET" action="/admin/orders" class="form-inline mb-4">
+                        <input type="text" name="search" placeholder="Tìm kiếm đơn hàng..." class="form-control mr-2">
+                        <select name="status" class="form-control mr-2">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="pending">Đang xử lý</option>
+                            <option value="completed">Hoàn thành</option>
+                            <option value="cancelled">Đã hủy</option>
+                            <option value="shipped">Đã giao hàng</option>
+                        </select>
+                        <input type="date" name="startDate" class="form-control mr-2">
+                        <input type="date" name="endDate" class="form-control mr-2">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </form>
+
+                    <!-- Orders table -->
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>STT</th>
+                                <th>ID</th>
+                                <th>Người đặt hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày đặt hàng</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach((order, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td> <!-- Số thứ tự -->
+                                <td><%= order._id %></td>
+                                <td><%= order.user.email %></td>
+                                <td><%= order.totalPrice.toLocaleString() %></td>
+                                <td>
+                                    <form method="POST" action="/admin/orders/<%= order._id %>/status?_method=PUT" class="form-inline">
+                                        <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                                            <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Đang xử lý</option>
+                                            <option value="completed" <%= order.status === 'completed' ? 'selected' : '' %>>Hoàn thành</option>
+                                            <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Đã hủy</option>
+                                            <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Đã giao hàng</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
+                                <td>
+                                    <a href="/admin/orders/<%= order._id %>" class="btn btn-info btn-sm">Chi tiết</a>
+                                    <a href="/admin/orders/<%= order._id %>/cancel" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')">Hủy</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

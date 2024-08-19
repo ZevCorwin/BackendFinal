@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Đơn Hàng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Thêm lớp CSS cho các trạng thái đơn hàng */
+        .order-status-pending { color: orange; }
+        .order-status-shipped { color: blue; }
+        .order-status-delivered { color: green; }
+        .order-status-cancelled { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <h4 class="text-center mt-3">Admin Dashboard</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/products">Quản lý Sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/categories">Quản lý Danh mục</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/orders">Quản lý Đơn hàng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">Quản lý Người dùng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/logout">Đăng xuất</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="container">
+                    <div class="order-info mb-4">
+                        <h2>Thông Tin Đơn Hàng</h2>
+                        <p><strong>Mã Đơn Hàng:</strong> <%= order._id %></p>
+                        <p><strong>Ngày Đặt Hàng:</strong> <%= order.orderDate.toDateString() %></p>
+                        <p><strong>Trạng Thái:</strong> 
+                            <span class="order-status-<%= order.status %>"><%= order.status %></span>
+                        </p>
+                        <p><strong>Người Đặt:</strong> <%= order.fullName %> (<%= order.user.email %>)</p>
+                        <p><strong>Số Điện Thoại:</strong> <%= order.phoneNumber %></p>
+                        <h3>Địa Chỉ Giao Hàng:</h3>
+                        <p><%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.postalCode %>, <%= order.shippingAddress.country %></p>
+                    </div>
+
+                    <div class="order-products mb-4">
+                        <h2>Sản Phẩm</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ảnh Sản Phẩm</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (order.products && order.products.length > 0) { %>
+                                    <% order.products.forEach(function(item) { %>
+                                        <% if (item.product) { %>
+                                            <tr>
+                                                <td><img src="<%= item.product.thumbnail %>" alt="<%= item.product.name %>" style="width: 100px; height: auto;"></td>
+                                                <td><%= item.product.name %></td>
+                                                <td><%= item.price %> VNĐ</td>
+                                                <td><%= item.quantity %></td>
+                                                <td><%= item.price * item.quantity %> VNĐ</td>
+                                            </tr>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="5">Thông tin sản phẩm không có sẵn</td>
+                                            </tr>
+                                        <% } %>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5">Không có sản phẩm nào trong đơn hàng.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="order-actions mb-4">
+                        <form action="/admin/orders/<%= order._id %>/status" method="POST">
+                            <div class="form-group">
+                                <label for="status">Cập Nhật Trạng Thái:</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Chờ Xử Lý</option>
+                                    <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Đã Gửi</option>
+                                    <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Đã Giao</option>
+                                    <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Đã Hủy</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                        </form>
+            
+                        <form action="/admin/orders/<%= order._id %>/cancel" method="POST" class="mt-2">
+                            <button type="submit" class="btn btn-danger">Hủy Đơn Hàng</button>
+                        </form>
+                    </div>
+            
+                    <a href="/admin/orders" class="btn btn-secondary">Quay lại danh sách đơn hàng</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

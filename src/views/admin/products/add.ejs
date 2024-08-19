@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Sản phẩm</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <h4 class="text-center mt-3">Admin Dashboard</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/admin/dashboard">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/products">
+                                Quản lý Sản phẩm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/categories">
+                                Quản lý Danh mục
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/orders">
+                                Quản lý Đơn hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">
+                                Quản lý Người dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/logout">
+                                Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-4">
+                <div class="container mt-4">
+                    <h2>Thêm Sản phẩm</h2>
+
+                    <!-- Thông báo thành công hoặc lỗi -->
+                    <% if (success_msg) { %>
+                        <div class="alert alert-success">
+                            <%= success_msg %>
+                        </div>
+                    <% } %>
+                    <% if (error_msg) { %>
+                        <div class="alert alert-danger">
+                            <%= error_msg %>
+                        </div>
+                    <% } %>
+
+                    <form action="/admin/products" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Tên Sản phẩm:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Giá:</label>
+                            <input type="number" class="form-control" id="price" name="price" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Danh mục:</label>
+                            <select class="form-control" id="category" name="category" required>
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="thumbnail">Ảnh Đại Diện:</label>
+                            <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="images">Ảnh Mô Tả (chọn nhiều ảnh):</label>
+                            <input type="file" class="form-control" id="images" name="images" accept="image/*" multiple>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Mô Tả:</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Số Lượng Tồn Kho:</label>
+                            <input type="number" class="form-control" id="stock" name="stock" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="options">Tùy Chọn (nhập dưới dạng JSON):</label>
+                            <textarea class="form-control" id="options" name="options" rows="10" cols="50"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </form>                    
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

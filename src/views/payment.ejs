@@ -1,0 +1,58 @@
+<!-- src/views/payment.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán</title>
+    <link rel="stylesheet" href="/path/to/your/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Thanh Toán</h1>
+
+        <!-- Hiển thị thông tin sản phẩm -->
+        <div class="order-summary">
+            <h2>Tóm tắt đơn hàng</h2>
+            <ul>
+                <% products.forEach(product => { %>
+                    <li>
+                        <%= product.name %> - Số lượng: <%= product.quantity %> - Giá: <%= product.price %> VNĐ
+                    </li>
+                <% }) %>
+            </ul>
+            <p>Tổng giá: <strong><%= totalPrice %> VNĐ</strong></p>
+        </div>
+
+        <!-- Form nhập thông tin địa chỉ giao hàng và phương thức thanh toán -->
+        <form action="/checkout" method="POST">
+            <h2>Thông tin giao hàng</h2>
+            <div>
+                <label for="street">Địa chỉ:</label>
+                <input type="text" name="shippingAddress[street]" required>
+            </div>
+            <div>
+                <label for="city">Thành phố:</label>
+                <input type="text" name="shippingAddress[city]" required>
+            </div>
+            <div>
+                <label for="postalCode">Mã bưu điện:</label>
+                <input type="text" name="shippingAddress[postalCode]" required>
+            </div>
+            <div>
+                <label for="phoneNumber">Số điện thoại:</label>
+                <input type="text" name="phoneNumber" required>
+            </div>
+
+            <h2>Phương thức thanh toán</h2>
+            <div>
+                <label><input type="radio" name="paymentMethod" value="bank" required> Thanh toán qua ngân hàng</label>
+                <label><input type="radio" name="paymentMethod" value="momo" required> Ví Momo</label>
+                <label><input type="radio" name="paymentMethod" value="cash_on_delivery" required> Thanh toán khi nhận hàng</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thanh Toán</button>
+        </form>
+    </div>
+</body>
+</html>
